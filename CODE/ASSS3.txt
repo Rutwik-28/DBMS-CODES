@@ -1,0 +1,101 @@
+mysql> select avg(salary) from instructor;
++-------------+
+| avg(salary) |
++-------------+
+|  85714.2857 |
++-------------+
+1 row in set (0.00 sec)
+
+
+
+
+
+mysql> select avg(salary) from instructor group by dept_name;
++-------------+
+| avg(salary) |
++-------------+
+|  65000.0000 |
+|  75000.0000 |
+|  60000.0000 |
+| 110000.0000 |
+|  90000.0000 |
++-------------+
+5 rows in set (0.00 sec)
+
+
+
+mysql> select avg(salary) from instructor group by dept_name having avg(salary>40000);
++-------------+
+| avg(salary) |
++-------------+
+|  65000.0000 |
+|  75000.0000 |
+|  60000.0000 |
+| 110000.0000 |
+|  90000.0000 |
++-------------+
+5 rows in set (0.00 sec)
+
+
+
+
+
+mysql> select sum(salary) from instructor group by dept_name;
++-------------+
+| sum(salary) |
++-------------+
+|       65000 |
+|       75000 |
+|       60000 |
+|      220000 |
+|      180000 |
++-------------+
+5 rows in set (0.00 sec)
+
+
+
+
+mysql> select min(salary),name from instructor group by name;
++-------------+------+
+| min(salary) | name |
++-------------+------+
+|       75000 | ABC  |
+|      110000 | PQR  |
+|       90000 | EFG  |
+|       60000 | XYZ  |
+|      110000 | LMN  |
+|       90000 | UVW  |
+|       65000 | STU  |
++-------------+------+
+7 rows in set (0.00 sec)
+
+
+
+
+mysql> select max(salary),name from instructor group by name;
++-------------+------+
+| max(salary) | name |
++-------------+------+
+|       75000 | ABC  |
+|      110000 | PQR  |
+|       90000 | EFG  |
+|       60000 | XYZ  |
+|      110000 | LMN  |
+|       90000 | UVW  |
+|       65000 | STU  |
++-------------+------+
+7 rows in set (0.00 sec)
+
+
+
+mysql> select count(id),dept_name from instructor group by dept_name;
++-----------+-----------+
+| count(id) | dept_name |
++-----------+-----------+
+|         1 | Biology   |
+|         1 | Computer  |
+|         1 | History   |
+|         2 | Music     |
+|         2 | Physics   |
++-----------+-----------+
+5 rows in set (0.00 sec)

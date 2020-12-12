@@ -1,0 +1,77 @@
+NAME : RUTWIK BALKRISHNA KARANDE
+ROLL NO : 37032
+
+
+
+1)FIND ALL COURSES TAUGHT IN BOTH,FY SEM I AND TY SEM II.
+
+mysql> SELECT course_id from section where semester = "I" and year ="FY" and course_id in (select course_id from section where semester='II'and year='TY');
+Empty set (0.11 sec)
+
+
+2)FIND ALL COURSES TAUGHT IN FY SEM I BUT NOT IN TY SEM II.
+mysql> select course_id from section where semester ="I" and year = "FY" and course_id not in (select course_id from section where semester ="II" and year ="TY");
++-----------+
+| course_id |
++-----------+
+| His-1     |
++-----------+
+1 row in set (0.00 sec)
+
+3)FIND OUT NAMES OF INSTRUCTORS WHOSE NAME IS NEITHER ABC NOR LMN.
+
+mysql> select name from instructor where name not in ('ABC','LMN');
++------+
+| name |
++------+
+| PQR  |
+| EFG  |
+| XYZ  |
+| UVW  |
+| STU  |
++------+
+5 rows in set (0.00 sec)
+
+4)FIND TOTAL NUMBER OF STUDENTS WHO HAVE TAKEN COURSE SECTIONS TAUGHT BY
+INSTRUCTOR 117.
+
+
+5)FIND THE IDs OF INSTRUCTORS WHO HAVE TAUGHT COURSE SECTION TO STUDENT S1.
+
+
+6)FIND THE NAMES OF ALL INSTRUCTORS WHOSE SALARY IS GREATER THAN AT LEAST
+ONE INSTRUCTOR IN THE BIOLOGY DEPARTMENT.
+
+mysql> Select name from instructor where salary > some ( select salary from instructor where dept_name = "Biology");
++------+
+| name |
++------+
+| ABC  |
+| PQR  |
+| EFG  |
+| LMN  |
+| UVW  |
++------+
+5 rows in set (0.07 sec)
+
+7)FIND THE NAMES OF ALL INSTRUCTORS THAT HAVE A SALARY VALUE GREATER THAN
+THAT OF EACH INSTRUCTOR IN BIOLOGY DEPARTMENT.
+mysql> select name from instructor where salary > any (select salary from instructor where dept_name= "Biology");
++------+
+| name |
++------+
+| ABC  |
+| PQR  |
+| EFG  |
+| LMN  |
+| UVW  |
++------+
+5 rows in set (0.00 sec)
+
+
+
+8)FIND THE NAMES OF ALL INSTRUCTORS WHOSE SALARY IS GREATER THAN AT LEAST
+
+mysql> select name from instructor where salary>some (select salary from instructor where dept_name= "Music");
+Empty set (0.00 sec)
+ONE INSTRUCTOR IN THE MUSIC DEPARTMENT.

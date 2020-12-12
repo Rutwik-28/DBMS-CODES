@@ -1,0 +1,98 @@
+ Name - Rutwik Balkrishna Karande
+ Roll no - 37032    
+ Class - TE 
+ Div - B
+
+
+
+
+Enter password: *********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 11
+Server version: 8.0.21 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.
+
+
+
+mysql> create database uni;
+Query OK, 1 row affected (0.15 sec)
+
+
+mysql> use uni
+Database changed
+
+mysql> Create table student (roll_no int(20), sname varchar(20), ph_no int(40));
+Query OK, 0 rows affected, 2 warnings (1.46 sec)
+
+mysql> desc student;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| roll_no | int         | YES  |     | NULL    |       |
+| sname   | varchar(20) | YES  |     | NULL    |       |
+| ph_no   | int         | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.09 sec)
+
+
+mysql> Create table staff (employee_id int(10), emp_name varchar(10), salary int(10));
+Query OK, 0 rows affected, 2 warnings (0.33 sec)
+
+mysql> desc staff;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| employee_id | int         | YES  |     | NULL    |       |
+| emp_name    | varchar(10) | YES  |     | NULL    |       |
+| salary      | int         | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+3 rows in set (0.20 sec)
+
+mysql> Alter table student add grade varchar(5);
+Query OK, 0 rows affected (1.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc student;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| roll_no | int         | YES  |     | NULL    |       |
+| sname   | varchar(20) | YES  |     | NULL    |       |
+| ph_no   | int         | YES  |     | NULL    |       |
+| grade   | varchar(5)  | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+4 rows in set (0.04 sec)
+
+mysql> Alter table student modify column roll_no varchar(5);
+Query OK, 0 rows affected (1.86 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc student;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| roll_no | varchar(5)  | YES  |     | NULL    |       |
+| sname   | varchar(20) | YES  |     | NULL    |       |
+| ph_no   | int         | YES  |     | NULL    |       |
+| grade   | varchar(5)  | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> Alter table student drop column grade;
+Query OK, 0 rows affected (1.28 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc student;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| roll_no | varchar(5)  | YES  |     | NULL    |       |
+| sname   | varchar(20) | YES  |     | NULL    |       |
+| ph_no   | int         | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.11 sec)
+
+
+mysql> Drop table student;
+Query OK, 0 rows affected (1.52 sec)

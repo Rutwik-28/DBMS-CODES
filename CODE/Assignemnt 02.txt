@@ -1,0 +1,816 @@
+mysql> create database UNIVERSITY;
+Query OK, 1 row affected (0.16 sec)
+
+mysql> CREATE TABLE classroom (building INT , room_no INT, capacity INT, primary key (building, room_no));
+ERROR 1046 (3D000): No database selected
+mysql> use UNIVERSITY;
+Database changed
+mysql> CREATE TABLE classroom (building INT , room_no INT, capacity INT, primary key (building, room_no));
+Query OK, 0 rows affected (1.70 sec)
+
+mysql> desc classroom;
++----------+------+------+-----+---------+-------+
+| Field    | Type | Null | Key | Default | Extra |
++----------+------+------+-----+---------+-------+
+| building | int  | NO   | PRI | NULL    |       |
+| room_no  | int  | NO   | PRI | NULL    |       |
+| capacity | int  | YES  |     | NULL    |       |
++----------+------+------+-----+---------+-------+
+3 rows in set (0.07 sec)
+
+
+mysql> CREATE TABLE department (dept_name VARCHAR(15) ,  building INT,foreign key(building)references classroom(building),budget);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> CREATE TABLE department (dept_name VARCHAR(15) ,  building INT,foreign key(building)references classroom(building),budget);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> CREATE TABLE department (dept_name VARCHAR(15) primary key ,  building INT,foreign key(building)references classroom(building),budget);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> CREATE TABLE department (dept_name VARCHAR(15) primary key ,building INT,foreign key(building) references classroom(building),budget);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> CREATE TABLE department (dept_name VARCHAR(15) primary key ,building INT,foreign key(building) references classroom(building),budget INT);
+Query OK, 0 rows affected (1.07 sec)
+
+mysql> DESC deaprtment;
+ERROR 1146 (42S02): Table 'university.deaprtment' doesn't exist
+mysql> DESC department;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| dept_name | varchar(15) | NO   | PRI | NULL    |       |
+| building  | int         | YES  | MUL | NULL    |       |
+| budget    | int         | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.17 sec)
+
+
+
+
+mysql> CREATE TABLE instructor (id INT primary key,name VARCHAR(15),salary INT,dept_name varchar(20),foreign key(dept_name) references department(dept_name));
+Query OK, 0 rows affected (1.74 sec)
+
+mysql> DESC instructor;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| id        | int         | NO   | PRI | NULL    |       |
+| name      | varchar(15) | YES  |     | NULL    |       |
+| salary    | int         | YES  |     | NULL    |       |
+| dept_name | varchar(20) | YES  | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.17 sec)
+
+
+
+mysql> CREATE TABLE student (sid INT primary key, name VARCHAR (15), tot_credits INT, dept_name VARCHAR(20), foreign key (dept_name) references department(dept_name) );
+Query OK, 0 rows affected (2.10 sec)
+
+mysql> desc student;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| sid         | int         | NO   | PRI | NULL    |       |
+| name        | varchar(15) | YES  |     | NULL    |       |
+| tot_credits | int         | YES  |     | NULL    |       |
+| dept_name   | varchar(20) | YES  | MUL | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+4 rows in set (0.06 sec)
+
+
+mysql> ALTER TABLE student  MODIFY sid VARCHAR(5);
+Query OK, 0 rows affected (3.71 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC STUDENT;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| sid         | varchar(5)  | NO   | PRI | NULL    |       |
+| name        | varchar(15) | YES  |     | NULL    |       |
+| tot_credits | int         | YES  |     | NULL    |       |
+| dept_name   | varchar(20) | YES  | MUL | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+4 rows in set (0.03 sec)
+
+mysql> INSERT INTO student (sid,name,tot_credits,dept_name) VALUES  ('S1','Aashish','Music',8),('S2','Rakesh','Computer',9), ('S3','Chetan','Music',9),('S4','Mayuri','Physics',9),('S5','Priya','Biology',7), ('S6','Tanvi','Computer',6),('S7','Anushka','History',9);
+ERROR 1366 (HY000): Incorrect integer value: 'Music' for column 'tot_credits' at row 1
+mysql> INSERT INTO student (sid, name, dept_name, tot_credits) VALUES  ('S1','Aashish','Music',8),('S2','Rakesh','Computer',9), ('S3','Chetan','Music',9),('S4','Mayuri','Physics',9),('S5','Priya','Biology',7), ('S6','Tanvi','Computer',6),('S7','Anushka','History',9);
+Query OK, 7 rows affected (0.16 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> SELECT *FROM student;
++-----+---------+-------------+-----------+
+| sid | name    | tot_credits | dept_name |
++-----+---------+-------------+-----------+
+| S1  | Aashish |           8 | Music     |
+| S2  | Rakesh  |           9 | Computer  |
+| S3  | Chetan  |           9 | Music     |
+| S4  | Mayuri  |           9 | Physics   |
+| S5  | Priya   |           7 | Biology   |
+| S6  | Tanvi   |           6 | Computer  |
+| S7  | Anushka |           9 | History   |
++-----+---------+-------------+-----------+
+7 rows in set (0.00 sec)
+
+
+mysql> ALTER TABLE course  MODIFY course_id VARCHAR(5);
+Query OK, 0 rows affected (3.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc modify;
+ERROR 1146 (42S02): Table 'university.modify' doesn't exist
+mysql> desc course;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| course_id | varchar(5)  | NO   | PRI | NULL    |       |
+| title     | varchar(20) | YES  |     | NULL    |       |
+| credit    | int         | YES  |     | NULL    |       |
+| dept_name | varchar(20) | YES  | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.06 sec)
+
+mysql> INSERT INTO course (course_id,title,credit,dept_name) VALUES ('Bio 1','Intro to Bio',4,'Biology'),('Phy-2','Physics Principles',4,'Physics'),('CS 1','Intro to CS',3,'Computer'),('CS-2','Robotics',4,'Computer'),('Bio 2','Genetics',3,'Biology'),('His-1','World History',4,'History'),('Mu-2','Music  video promotion',4,'Music'),('Mu-1','Music audio',3,'Music');
+ERROR 1406 (22001): Data too long for column 'title' at row 7
+mysql> INSERT INTO course (course_id,title,credit,dept_name) VALUES ('Bio 1','Intro to Bio',4,'Biology'),('Phy-2','Physics Principles',4,'Physics'),('CS 1','Intro to CS',3,'Computer'),('CS-2','Robotics',4,'Computer'),('Bio 2','Genetics',3,'Biology'),('His-1','World History',4,'History'),('Mu-2','video promo',4,'Music'),('Mu-1','Music audio',3,'Music');
+Query OK, 8 rows affected (0.12 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> SELECT *FROM COURSE;
++-----------+--------------------+--------+-----------+
+| course_id | title              | credit | dept_name |
++-----------+--------------------+--------+-----------+
+| Bio 1     | Intro to Bio       |      4 | Biology   |
+| Bio 2     | Genetics           |      3 | Biology   |
+| CS 1      | Intro to CS        |      3 | Computer  |
+| CS-2      | Robotics           |      4 | Computer  |
+| His-1     | World History      |      4 | History   |
+| Mu-1      | Music audio        |      3 | Music     |
+| Mu-2      | video promo        |      4 | Music     |
+| Phy-2     | Physics Principles |      4 | Physics   |
++-----------+--------------------+--------+-----------+
+8 rows in set (0.00 sec)
+
+mysql> CREATE TABLE course (course_id INT primary key , title VARCHAR (20) , credit INT, dept_name VARCHAR(20), foreign key (dept_name) references department(dept_name) )
+    -> ;
+Query OK, 0 rows affected (0.78 sec)
+
+mysql> DESC course;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| course_id | int         | NO   | PRI | NULL    |       |
+| title     | varchar(20) | YES  |     | NULL    |       |
+| credit    | int         | YES  |     | NULL    |       |
+| dept_name | varchar(20) | YES  | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.17 sec)
+
+mysql> CREATE TABLE time_slot;
+ERROR 1113 (42000): A table must have at least 1 column
+mysql> CREATE TABLE time_slot (t_id INT primary key,day VARCHAR (10),start_time TIME,end_time TIME);
+Query OK, 0 rows affected (1.95 sec)
+
+mysql> desc time_slot;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| t_id       | int         | NO   | PRI | NULL    |       |
+| day        | varchar(10) | YES  |     | NULL    |       |
+| start_time | time        | YES  |     | NULL    |       |
+| end_time   | time        | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.04 sec)
+
+
+
+INSERT 
+
+
+mysql> insert into classroom(building1,roomnumber,capacity) values(1,11,120),
+    -> (2,21,120),(3,32,60),(4,42,180),(5,52,60);^C
+mysql> INSERT INTO classroom (building, room_no, capacity ) VALUES (1,11,120), (2,21,120),(3,32,60),(4,42,180),(5,52,60);
+Query OK, 5 rows affected (0.28 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select *from classroom;
++----------+---------+----------+
+| building | room_no | capacity |
++----------+---------+----------+
+|        1 |      11 |      120 |
+|        2 |      21 |      120 |
+|        3 |      32 |       60 |
+|        4 |      42 |      180 |
+|        5 |      52 |       60 |
++----------+---------+----------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO department (dept_name, building, budget) VALUES ('Computer',1,500000),('Music',2,100000),('Physics',3,400000), ('History',4,300000),('Biology',5,700000);
+Query OK, 5 rows affected (0.17 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SELECT *FROM deppartment;
+ERROR 1146 (42S02): Table 'university.deppartment' doesn't exist
+mysql> SELECT *FROM department;
++-----------+----------+--------+
+| dept_name | building | budget |
++-----------+----------+--------+
+| Biology   |        5 | 700000 |
+| Computer  |        1 | 500000 |
+| History   |        4 | 300000 |
+| Music     |        2 | 100000 |
+| Physics   |        3 | 400000 |
++-----------+----------+--------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO instructor (id, name, dept_name, salary) VALUES (111,'ABC','Computer',65000),(112,'PQR','Music',90000),
+    -> (113,'EFG','Physics',70000),(114,'XYZ','History',50000),(115,'LMN','Music',90000), (116,'UVW','Physics',70000),(117,'STU','Biology',55000);
+Query OK, 7 rows affected (0.20 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select *from instructor;
++-----+------+--------+-----------+
+| id  | name | salary | dept_name |
++-----+------+--------+-----------+
+| 111 | ABC  |  65000 | Computer  |
+| 112 | PQR  |  90000 | Music     |
+| 113 | EFG  |  70000 | Physics   |
+| 114 | XYZ  |  50000 | History   |
+| 115 | LMN  |  90000 | Music     |
+| 116 | UVW  |  70000 | Physics   |
+| 117 | STU  |  55000 | Biology   |
++-----+------+--------+-----------+
+7 rows in set (0.00 sec)
+
+mysql> INSERT INTO time_slot (t_id,day,start_time,end_time)VALUES ('t1','Monday','09:00:00','02:00:00'),('t2','Monday','10:00:00','03:00:00'), ('t3','Tuesday','09:00:00','02:00:00'),('t4','Thursday','08:00:00','10:00:00'), ('t5','Friday','07:00:00','09:00:00');
+Query OK, 5 rows affected (0.14 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select *from time_slot;
++------+----------+------------+----------+
+| t_id | day      | start_time | end_time |
++------+----------+------------+----------+
+| t1   | Monday   | 09:00:00   | 02:00:00 |
+| t2   | Monday   | 10:00:00   | 03:00:00 |
+| t3   | Tuesday  | 09:00:00   | 02:00:00 |
+| t4   | Thursday | 08:00:00   | 10:00:00 |
+| t5   | Friday   | 07:00:00   | 09:00:00 |
++------+----------+------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> insert into section (course_id,sec_id,semester,year,building,room_no,t_id) VALUES ('Phy-2','S12','II','FY',3,32,'t3'),('CS 1','S13','II','SY',1,11,'t4'),('CS-2','S13','II','SY',3,32,'t5'),('Mu-1','S14','II','TY',2,21,'t4'),('Mu-2','S14','II','TY',2,21,'t2'),('His-1','S15','I','FY',4,42,'t3'),('Bio 1','S16','II','TY',5,52,'t3');
+Query OK, 7 rows affected (0.24 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> SELECT *FROM section;
++-----------+--------+----------+------+------+----------+---------+
+| course_id | sec_id | semester | year | t_id | building | room_no |
++-----------+--------+----------+------+------+----------+---------+
+| Bio 1     | S16    | II       | TY   | t3   |        5 |      52 |
+| CS 1      | S13    | II       | SY   | t4   |        1 |      11 |
+| CS-2      | S13    | II       | SY   | t5   |        3 |      32 |
+| His-1     | S15    | I        | FY   | t3   |        4 |      42 |
+| Mu-1      | S14    | II       | TY   | t4   |        2 |      21 |
+| Mu-2      | S14    | II       | TY   | t2   |        2 |      21 |
+| Phy-2     | S12    | II       | FY   | t3   |        3 |      32 |
++-----------+--------+----------+------+------+----------+---------+
+7 rows in set (0.00 sec)
+
+mysql> insert into takes(course_id,sec_id,semester,year,sid,grade)values('Phy-2','S12',
+'II','FY','S4','A+'),('CS-1','S13','II','SY','S5','B'),('Mu-2','S14','II','TY','
+S3','A'),('His-1','S15','I','FY','S7','C'),('Bio-1','S11','I','FY','S5','A'),('B
+io-2','S11','I','FY','S5','B');
+Query OK, 6 rows affected (0.59 sec)
+Records: 6 Duplicates: 0 Warnings: 0
+mysql> select * from takes;
++-----+-------+----------+------+-------+-------+
+| sid | sec_id | semester | year | cid | grade |
++-----+-------+----------+------+-------+-------+
+| S3 | S14 | II | TY | Mu-2 | A |
+| S4 | S12 | II | FY | Phy-2 | A+ |
+| S5 | S11 | I | FY | Bio-1 | A |
+| S5 | S11 | I | FY | Bio-2 | B |
+| S5 | S13 | II | SY | CS-1 | B |
+| S7 | S15 | I | FY | His-1 | C |
++-----+-------+----------+------+-------+-------+
+6 rows in set (0.00 sec)
+
+mysql> insert into teaches(course_id,sec_id,semester,year,id)values('Bio-1','S11','I',
+'FY',117),('Phy-2','S12','II','FY',113),('CS-2','S13','II','SY',111),('Bio-2','S
+11','I','FY',117),('Mu-1','S14','II','TY',115);
+Query OK, 5 rows affected (0.55 sec)
+Records: 5 Duplicates: 0 Warnings: 0
+mysql> select * from teaches;
++-----+-------+-------+----------+------+
+
+| id | course_id | sec_id | semester | year |
++-----+-------+-------+----------+------+
+| 113 | Phy-2 | S12 | II | FY |
+| 117 | Bio-1 | S11 | I | FY |
+| 117 | Bio-2 | S11 | I | FY |
+| 111 | CS-2 | S13 | II | SY |
+| 115 | Mu-1 | S14 | II | TY |
++-----+-------+-------+----------+------+
+5 rows in set (0.00 sec)
+
+************************************UPDATE***************************************************
+
+mysql> update instructor set join_date='2015-12-12' where id=111;
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update instructor set join_date='2016-12-12' where id=111;
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update instructor set join_date='2015-12-12' where id=111;
+Query OK, 1 row affected (0.09 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update instructor set join_date='2016-12-12' where id=112;
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update instructor set join_date='2015-12-5' where id=112;
+Query OK, 1 row affected (0.12 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update instructor set join_date='2018-12-17' where id=113;
+Query OK, 1 row affected (0.12 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update instructor set join_date='2016-12-18' where id=114;
+Query OK, 1 row affected (0.12 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update instructor set join_date='2016-12-18' where id=115;
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update instructor set join_date='2019-12-18' where id=116;
+Query OK, 1 row affected (0.36 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update instructor set join_date='2014-6-18' where id=117;
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select *from instructor;
++-----+------+--------+-----------+------------+
+| id  | name | salary | dept_name | join_date  |
++-----+------+--------+-----------+------------+
+| 111 | ABC  |  65000 | Computer  | 2015-12-12 |
+| 112 | PQR  |  90000 | Music     | 2015-12-5  |
+| 113 | EFG  |  70000 | Physics   | 2018-12-17 |
+| 114 | XYZ  |  50000 | History   | 2016-12-18 |
+| 115 | LMN  |  90000 | Music     | 2016-12-18 |
+| 116 | UVW  |  70000 | Physics   | 2019-12-18 |
+| 117 | STU  |  55000 | Biology   | 2014-6-18  |
++-----+------+--------+-----------+------------+
+7 rows in set (0.00 sec)
+
+
+******************************************QUERIES*********************************************
+
+
+
+1) Find the names of all instructor in computer department who ahs salary greater than 70000
+
+mysql> select name from instructor where dept_name='computer' and salary>70000;.
+Empty set (0.05 sec)
+
+2) Find the name of instructor who are working in physics department.
+
+mysql> select name from instructor where dept_name='Physics';
++------+
+| name |
++------+
+| EFG  |
+| UVW  |
++------+
+2 rows in set (0.00 sec)
+
+3)Find the name of department whose budget is greater than 500000.
+
+mysql> select dept_name from department where budget>500000;
++-----------+
+| dept_name |
++-----------+
+| Biology   |
++-----------+
+1 row in set (0.04 sec)
+
+4) Find the name of student who are studying in computer department.
+
+mysql> select name from student where dept_name='computer';
++--------+
+| name   |
++--------+
+| Rakesh |
+| Tanvi  |
++--------+
+2 rows in set (0.08 sec)
+
+5) Find the names of students who studying in music department who had got total creadits more than 7.
+mysql> select name from student where dept_name='Music' and tot_credits>7;
++---------+
+| name    |
++---------+
+| Aashish |
+| Chetan  |
++---------+
+2 rows in set (0.00 sec)
+
+6) Find out the capacity of room.
+
+mysql> select avg(capacity) from classroom;
++---------------+
+| avg(capacity) |
++---------------+
+|      108.0000 |
++---------------+
+1 row in set (0.15 sec)
+
+7) Find out the titles along with deptname of biology department.
+mysql> select title,dept_name from course where dept_name='Biology';
++--------------+-----------+
+| title        | dept_name |
++--------------+-----------+
+| Intro to Bio | Biology   |
+| Genetics     | Biology   |
++--------------+-----------+
+2 rows in set (0.09 sec)
+
+8) Find out titles in music department.
+
+mysql> select title from course where dept_name='Music';
++-------------+
+| title       |
++-------------+
+| Music audio |
+| video promo |
++-------------+
+2 rows in set (0.00 sec)
+
+9) Give the increment of rs.10000 o those instructor whose salary is less than 50000.
+
+mysql> update instructor set salary =case
+    -> when salary<50000
+    -> then salary+10000
+    -> else
+    -> salary+0
+    -> end;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 7  Changed: 0  Warnings: 0
+
+mysql> select *from instructor;
++-----+------+--------+-----------+------------+
+| id  | name | salary | dept_name | join_date  |
++-----+------+--------+-----------+------------+
+| 111 | ABC  |  65000 | Computer  | 2015-12-12 |
+| 112 | PQR  |  90000 | Music     | 2015-12-5  |
+| 113 | EFG  |  70000 | Physics   | 2018-12-17 |
+| 114 | XYZ  |  50000 | History   | 2016-12-18 |
+| 115 | LMN  |  90000 | Music     | 2016-12-18 |
+| 116 | UVW  |  70000 | Physics   | 2019-12-18 |
+| 117 | STU  |  55000 | Biology   | 2014-6-18  |
++-----+------+--------+-----------+------------+
+7 rows in set (0.00 sec)
+
+
+10) Give the increment of rs 10000 to those instructor whose salary is less than 70000 else give increment of
+rs 20000.
+
+mysql> update instructor set salary =case
+    -> when salary<70000 then salary+10000
+    -> else
+    -> salary+20000
+    -> end;
+Query OK, 7 rows affected (0.10 sec)
+Rows matched: 7  Changed: 7  Warnings: 0
+
+mysql> select *from instructor;
++-----+------+--------+-----------+------------+
+| id  | name | salary | dept_name | join_date  |
++-----+------+--------+-----------+------------+
+| 111 | ABC  |  75000 | Computer  | 2015-12-12 |
+| 112 | PQR  | 110000 | Music     | 2015-12-5  |
+| 113 | EFG  |  90000 | Physics   | 2018-12-17 |
+| 114 | XYZ  |  60000 | History   | 2016-12-18 |
+| 115 | LMN  | 110000 | Music     | 2016-12-18 |
+| 116 | UVW  |  90000 | Physics   | 2019-12-18 |
+| 117 | STU  |  65000 | Biology   | 2014-6-18  |
++-----+------+--------+-----------+------------+
+7 rows in set (0.05 sec)
+
+
+11) Find out the set of all the courses tought either in I st sem or in II nd sem
+
+mysql> select course_id from section where semester='I' OR semester='II';.
++-----------+
+| course_id |
++-----------+
+| CS 1      |
+| Mu-1      |
+| Mu-2      |
+| CS-2      |
+| Phy-2     |
+| His-1     |
+| Bio 1     |
++-----------+
+7 rows in set (0.07 sec)
+
+
+12) Find average salary of all the instructor.
+mysql> select avg(salary) from instructor;
++-------------+
+| avg(salary) |
++-------------+
+|  85714.2857 |
++-------------+
+1 row in set (0.00 sec)
+
+13) Find the sum of salary of all instructor.
+
+mysql>  select sum(salary) from instructor;
++-------------+
+| sum(salary) |
++-------------+
+|      600000 |
++-------------+
+1 row in set (0.00 sec)
+
+
+14) Find average salary in each department where average salary of all instructor is more than 40000.
+mysql> select avg(salary) from instructor group by dept_name having avg(salary>40000);
++-------------+
+| avg(salary) |
++-------------+
+|  65000.0000 |
+|  75000.0000 |
+|  60000.0000 |
+| 110000.0000 |
+|  90000.0000 |
++-------------+
+5 rows in set (0.06 sec)
+
+15) Find average salary along with deptname where average salary of all instructor is more than 40000.
+
+mysql> select avg(salary) ,dept_name from instructor group by dept_name having avg(salary>40000);
++-------------+-----------+
+| avg(salary) | dept_name |
++-------------+-----------+
+|  65000.0000 | Biology   |
+|  75000.0000 | Computer  |
+|  60000.0000 | History   |
+| 110000.0000 | Music     |
+|  90000.0000 | Physics   |
++-------------+-----------+
+5 rows in set (0.00 sec)
+
+16) Find number of instructor with deptname in each department.
+mysql> select count(id) ,dept_name from instructor group by dept_name;
++-----------+-----------+
+| count(id) | dept_name |
++-----------+-----------+
+|         1 | Biology   |
+|         1 | Computer  |
+|         1 | History   |
+|         2 | Music     |
+|         2 | Physics   |
++-----------+-----------+
+5 rows in set (0.00 sec)
+
+
+17) Find out deptname with average salary where average salary where average salary not in between 10000
+and 1 lakh.
+mysql> select dept_name,avg(salary) from instructor group by dept_name having avg(salary) not between
+    -> 10000 and 100000;
++-----------+-------------+
+| dept_name | avg(salary) |
++-----------+-------------+
+| Music     | 110000.0000 |
++-----------+-------------+
+1 row in set (0.00 sec)
+
+18) Find the names of all instructor along with their deptname and departmenr building number.
+
+mysql> select instructor.name,instructor.dept_name,department.building from instructor,department where
+    -> instructor.dept_name=department.dept_name;
++------+-----------+----------+
+| name | dept_name | building |
++------+-----------+----------+
+| ABC  | Computer  |        1 |
+| PQR  | Music     |        2 |
+| LMN  | Music     |        2 |
+| EFG  | Physics   |        3 |
+| UVW  | Physics   |        3 |
+| XYZ  | History   |        4 |
+| STU  | Biology   |        5 |
++------+-----------+----------+
+7 rows in set (0.02 sec)
+
+19) Find the instructor name and course ID for instructor in computer department.
+
+mysql> select instructor.name,instructor.dept_name,course.course_id from instructor,course,teaches group by
+instructor.iid having dept_name='computer';
++------+-----------+-------+
+| name | dept_name | course_id |
++------+-----------+-------+
+| ABC | computer | Bio-1 |
++------+-----------+-------+
+1 row in set (0.00 sec)
+
+20) Find out instructor who has taught some courses.
+
+mysql> select instructor.name,instructor.dept_name,course.courseid from instructor,course where
+instructor.dept_name=course.dept_name;
++------+-----------+-------+
+| name | dept_name | cid |
++------+-----------+-------+
+| ABC | computer | CS-1 |
+| ABC | computer | CS-2 |
+| PQR | Music | Mu-1 |
+| PQR | Music | Mu-2 |
+| EFG | Physics | Phy-2 |
+| XYZ | History | His-1 |
+| LMN | Music | Mu-1 |
+| LMN | Music | Mu-2 |
+| UVW | Physics | Phy-2 |
+| STU | Biology | Bio-1 |
+| STU | Biology | Bio-2 |
++------+-----------+-------+
+11 rows in set (0.00 sec)
+
+21) For all instructor in university who has tought some courses find their names and courses ID of all courses
+they taught.
+mysql> select instructor.name from instructor,teaches where instructor.id=teaches.id;
++------+
+| name |
++------+
+| STU |
+| ABC |
+| LMN |
+| EFG |
++------+
+5 rows in set (0.00 sec)
+
+22) List the names of instructor along with title of the courses that they teach.
+mysql> select instructor.name,course.title from instructor,course,teaches where instructor.id=teaches.id;
++------+----------------------+
+| name | title |
++------+----------------------+
+| STU | Intro to bio |
+| STU | Intro to bio |
+| ABC | Intro to bio |
+| LMN | Intro to bio |
+| EFG | Intro to bio |
+| STU | Genetics |
+| STU | Genetics |
+| ABC | Genetics |
+| LMN | Genetics |
+| EFG | Genetics |
+| STU | Intro to CS |
+| STU | Intro to CS |
+| ABC | Intro to CS |
+| LMN | Intro to CS |
+| EFG | Intro to CS |
+| STU | Robotics |
+| STU | Robotics |
+| ABC | Robotics |
+| LMN | Robotics |
+| EFG | Robotics |
+| STU | World History |
+| STU | World History |
+| ABC | World History |
+| LMN | World History |
+| EFG | World History |
+| STU | Music audio |
+| STU | Music audio |
+| ABC | Music audio |
+| LMN | Music audio |
+| EFG | Music audio |
+| STU | Music video promotio |
+| STU | Music video promotio |
+| ABC | Music video promotio |
+| LMN | Music video promotio |
+| EFG | Music video promotio |
+| STU | Physics Principles |
+| STU | Physics Principles |
+| ABC | Physics Principles |
+| LMN | Physics Principles |
+| EFG | Physics Principles |
++------+----------------------+
+40 rows in set (0.00 sec)
+
+
+
+23) Find the names of all department whose name includes substring ‘I’.
+mysql> select * from department where dept_name like '%i%';
++-----------+----------+--------+
+| dept_name | building | budget |
++-----------+----------+--------+
+| Biology   |        5 | 700000 |
+| History   |        4 | 300000 |
+| Music     |        2 | 100000 |
+| Physics   |        3 | 400000 |
++-----------+----------+--------+
+4 rows in set (0.00 sec)
+
+
+24) Find the name of instructor whose name are exactly 3 characters.
+mysql> select * from instructor where name like '___';
++-----+------+--------+-----------+------------+
+| id  | name | salary | dept_name | join_date  |
++-----+------+--------+-----------+------------+
+| 111 | ABC  |  75000 | Computer  | 2015-12-12 |
+| 112 | PQR  | 110000 | Music     | 2015-12-5  |
+| 113 | EFG  |  90000 | Physics   | 2018-12-17 |
+| 114 | XYZ  |  60000 | History   | 2016-12-18 |
+| 115 | LMN  | 110000 | Music     | 2016-12-18 |
+| 116 | UVW  |  90000 | Physics   | 2019-12-18 |
+| 117 | STU  |  65000 | Biology   | 2014-6-18  |
++-----+------+--------+-----------+------------+
+7 rows in set (0.00 sec)
+
+25) Find titles along with department name whose dept must end with ‘Y’.
+mysql> select title,dept_name from course where dept_name like '%y';
++---------------+-----------+
+| title         | dept_name |
++---------------+-----------+
+| Intro to Bio  | Biology   |
+| Genetics      | Biology   |
+| World History | History   |
++---------------+-----------+
+3 rows in set (0.00 sec)
+
+26) List the entire instructor in descending order.
+
+mysql> select * from instructor order by name desc;
++-----+------+--------+-----------+------------+
+| id  | name | salary | dept_name | join_date  |
++-----+------+--------+-----------+------------+
+| 114 | XYZ  |  60000 | History   | 2016-12-18 |
+| 116 | UVW  |  90000 | Physics   | 2019-12-18 |
+| 117 | STU  |  65000 | Biology   | 2014-6-18  |
+| 112 | PQR  | 110000 | Music     | 2015-12-5  |
+| 115 | LMN  | 110000 | Music     | 2016-12-18 |
+| 113 | EFG  |  90000 | Physics   | 2018-12-17 |
+| 111 | ABC  |  75000 | Computer  | 2015-12-12 |
++-----+------+--------+-----------+------------+
+7 rows in set (0.00 sec)
+
+27) Find the names of instructor with salary amount between 30000 and 70000.
+
+mysql> select name from instructor where salary between 30000 and 70000;
++------+
+| name |
++------+
+| XYZ  |
+| STU  |
++------+
+2 rows in set (0.00 sec)
+
+28) Find the maximum salary and department name from instructor.
+mysql> select max(salary),dept_name from instructor group by dept_name;
++-------------+-----------+
+| max(salary) | dept_name |
++-------------+-----------+
+|       65000 | Biology   |
+|       75000 | Computer  |
+|       60000 | History   |
+|      110000 | Music     |
+|       90000 | Physics   |
++-------------+-----------+
+5 rows in set (0.00 sec)
+
+29) Find minimum salary of all instructor.
+
+mysql> select min(salary) from instructor;
++-------------+
+| min(salary) |
++-------------+
+|       60000 |
++-------------+
+1 row in set (0.00 sec)
+
+
+30) Find sum of the salaries of all instructor.
+
+mysql> select sum(salary) from instructor;
++-------------+
+| sum(salary) |
++-------------+
+|      600000 |
++-------------+
+1 row in set (0.00 sec)
+
+
+31) Find the number of Ids entered in instructor.
+
+mysql> select count(id) from instructor;
++-----------+
+| count(id) |
++-----------+
+|         7 |
++-----------+
+1 row in set (0.06 sec)
